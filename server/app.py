@@ -25,9 +25,10 @@ def create_app(image_store, vision_api):
 
 
 def get_app():
-    db = JsonDB('data.json')
+    db_path = os.environ.get('DB_PATH', 'data.json')
+    db = JsonDB(db_path)
 
-    storage_path = os.environ.get('LOOK_STORAGE_PATH', '.')
+    storage_path = os.environ.get('STORAGE_PATH', '.')
     image_store = ImageStore(storage_path, db)
     vision_api = VisionApi(db, image_store)
     return create_app(image_store, vision_api)
