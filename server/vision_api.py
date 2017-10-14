@@ -1,6 +1,6 @@
+import json
 import logging
 
-import jsonpickle
 from google.cloud.vision import ImageAnnotatorClient, types
 
 logger = logging.getLogger(__name__)
@@ -77,11 +77,11 @@ class VisionApi:
         if self._db:
             db_obj = self._db.get(self._DB_KEY)
             if identifier in db_obj.keys():
-                return jsonpickle.decode(db_obj[identifier])
+                return json.loads(db_obj[identifier])
         return None
 
     def _save_to_db(self, identifier, response):
         if self._db:
             db_obj = self._db.get(self._DB_KEY)
-            db_obj[identifier] = jsonpickle.encode(response)
+            db_obj[identifier] = json.dump(response)
             self._db.set(self._DB_KEY, db_obj)

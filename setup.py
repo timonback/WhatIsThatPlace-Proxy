@@ -7,7 +7,6 @@ setup(
         'falcon>=1.1.0',
         'msgpack-python>=0.4.8',
         'google-cloud-vision>=0.27.0',
-        'jsonpickle>=0.9.5',
 
         'gunicorn', #Linux
         'waitress', #Windows
