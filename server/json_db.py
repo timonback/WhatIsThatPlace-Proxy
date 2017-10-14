@@ -18,7 +18,6 @@ class JsonDB:
         except FileNotFoundError:
             logger.warning(f"Could not open database file {self.filename}")
 
-
     def get(self, key):
         if key in self.db.keys():
             return self.db[key]
@@ -26,9 +25,17 @@ class JsonDB:
 
     def save(self):
         with open(self.filename, 'w') as outfile:
-            json.dump(self.db, outfile)
+            json.dump(self.db, outfile,
+                      sort_keys=True, indent=2, separators=(',', ': '))
 
     def set(self, key, value, overwrite=True):
+        if not self._is_jsonable(key):
+            logger.error(f"The key is not saveable {key}")
+            return
+        if not self._is_jsonable(value):
+            logger.error(f"The value is not saveable {value}")
+            return
+
         if key in self.db.keys() and overwrite is False:
             return None
         self.db[key] = value
@@ -36,3 +43,11 @@ class JsonDB:
         self.save()
 
         return value
+
+    @staticmethod
+    def _is_jsonable(x):
+        try:
+            json.dumps(x)
+            return True
+        except:
+            return False

@@ -1,13 +1,14 @@
+import json
 import mimetypes
 
 import falcon
-import msgpack
 
 
 class ImageTypeValidator:
     ALLOWED_IMAGE_TYPES = (
         'image/gif',
         'image/jpeg',
+        'image/jpg',
         'image/png',
     )
 
@@ -19,27 +20,25 @@ class ImageTypeValidator:
 
 
 class Collection(object):
+    PATH = '/image/'
+
     def __init__(self, image_store):
         self._image_store = image_store
 
     def on_get(self, req, resp):
         doc = {
-            'images': [
-                {
-                    'href': '/images/1eaf6ef1-7f2d-4ecc-a8d5-6e8adba7cc0e.png'
-                }
-            ]
+            'images': self._image_store.get_all()
         }
 
-        resp.data = msgpack.packb(doc, use_bin_type=True)
-        resp.content_type = 'application/msgpack'
+        resp.body = json.dumps(doc, ensure_ascii=False)
+        resp.content_type = falcon.MEDIA_JSON
         resp.status = falcon.HTTP_200
 
     @falcon.before(ImageTypeValidator.validate_image_type)
     def on_post(self, req, resp):
         name = self._image_store.save(req.stream, req.content_type)
         resp.status = falcon.HTTP_201
-        resp.location = '/images/' + name
+        resp.location = self.PATH + name
 
 
 class Item(object):
@@ -53,5 +52,3 @@ class Item(object):
         except IOError:
             # Normally you would also log the error.
             raise falcon.HTTPNotFound()
-
-

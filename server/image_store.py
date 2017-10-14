@@ -1,10 +1,10 @@
+import hashlib
 import io
+import logging
 import mimetypes
 import os
 import re
 import uuid
-import hashlib
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +21,15 @@ class ImageStore(object):
         self._db = db
         self._uuidgen = uuidgen
         self._fopen = fopen
+
+    def get_all(self):
+        items = []
+        if self._db:
+            db_obj = self._db.get(self._DB_KEY)
+            for item in db_obj.values():
+                items.append(item)
+
+        return items
 
     def open(self, name):
         logger.info(f"Returning file {name}")

@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 
 import falcon
 
@@ -7,17 +7,20 @@ from .image_store import ImageStore
 from .images import Collection, Item
 from .json_db import JsonDB
 from .util.logger import setup_logger
-
+from .vision import Vision
+from .vision_api import VisionApi
 
 logger = logging.getLogger(__name__)
 
 
-def create_app(image_store):
+def create_app(image_store, vision_api):
     setup_logger('output.log')
 
     api = falcon.API()
-    api.add_route('/images', Collection(image_store))
-    api.add_route('/images/{name}', Item(image_store))
+    collection = Collection(image_store)
+    api.add_route(collection.PATH, collection)
+    api.add_route('/image/{name}', Item(image_store))
+    api.add_route('/vision/{name}', Vision(vision_api))
     return api
 
 
@@ -26,4 +29,5 @@ def get_app():
 
     storage_path = os.environ.get('LOOK_STORAGE_PATH', '.')
     image_store = ImageStore(storage_path, db)
-    return create_app(image_store)
+    vision_api = VisionApi(db, image_store)
+    return create_app(image_store, vision_api)
