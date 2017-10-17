@@ -5,8 +5,6 @@ services:
     ports:
       - 8008:8000
     volumes:
-      - ./image_store:/usr/src/app/image_store
+      - ./image_store/:/usr/src/app/image_store/
       - ./data.json:/usr/src/app/data.json
       - ./gkey.json:/usr/src/app/gkey.json
-volumes:
-  image_stores:
