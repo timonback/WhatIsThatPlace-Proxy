@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-python3 setup.py install
+python3.6 setup.py install
 
 export GOOGLE_APPLICATION_CREDENTIALS=gkey.json
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3.6
+
 from setuptools import setup
 
 setup(
@@ -5,11 +7,13 @@ setup(
     version='0.0.1',
     install_requires=[
         'falcon>=1.1.0',
-        'msgpack-python>=0.4.8',
-        'google-cloud-vision>=0.27.0',
+
+        'grpcio<1.6',
+        'google-cloud-core==0.27.0',
+        'google-cloud-vision==0.27.0',
 
         'gunicorn', #Linux
-        'waitress', #Windows
+        # 'waitress', #Windows
         'httpie', #Nice http client
     ],
     url='https://github.com/timonback/whatisthatplace-proxy',

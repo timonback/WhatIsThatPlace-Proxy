@@ -8,6 +8,12 @@ Ensure to create and download your Google Creditials (JSON file) place it in the
 You can get them from [https://console.cloud.google.com/apis/credentials](https://console.cloud.google.com/apis/credentials). They are called Service account keys. Also enable the Vision API if you havent done so at [https://console.cloud.google.com/apis/api/vision.googleapis.com/overview](https://console.cloud.google.com/apis/api/vision.googleapis.com/overview).
 
 ## Run
+Create a virtual environment
+```
+virtualenv -p python3.6 envlinux
+source envlinux/bin/activate
+```
+
 Just run ```run.sh```
 
 The python dependencies will be installed automatically.
