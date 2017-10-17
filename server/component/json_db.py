@@ -23,6 +23,9 @@ class JsonDB:
             return self.db[key]
         return {}
 
+    def keys(self):
+        return self.db.keys()
+
     def save(self):
         with open(self.filename, 'w') as outfile:
             json.dump(self.db, outfile,
