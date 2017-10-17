@@ -1,0 +1,11 @@
+version: "3"
+services:
+  server:
+    build: .
+    ports:
+      - 8008:8000
+    volumes:
+      - ./data.json:/usr/src/app/data.json
+      - ./gkey.json:/usr/src/app/gkey.json
+volumes:
+  image_stores:

@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 
+HOST=0.0.0.0
+PORT=8000
+
 python3.6 setup.py install
 
 export GOOGLE_APPLICATION_CREDENTIALS=gkey.json
 
 function server_unix() {
     # On Unix
-    gunicorn --reload 'server.app:get_app()'
+    gunicorn --bind="$HOST:$PORT" --reload 'server.app:get_app()'
 }
 
 function server_windows() {
     # On Windows
-    waitress-serve --port=8000 "server.app:get_app()"
+    waitress-serve --host="$HOST" -port="$PORT" "server.app:get_app()"
 }
 
 if [ "$(uname)" == "Darwin" ]; then
