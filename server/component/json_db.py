@@ -14,7 +14,11 @@ class JsonDB:
     def open(self):
         try:
             with open(self.filename) as json_data:
-                self.db = json.load(json_data)
+                try:
+                    self.db = json.load(json_data)
+                except ValueError:
+                    logger.warning(f"Could not parse the data in {self.filename}")
+                    self.db = {}
         except FileNotFoundError:
             logger.warning(f"Could not open database file {self.filename}")
 
