@@ -1,7 +1,8 @@
+import falcon
 import logging
 import os
-
-import falcon
+from server.middleware.authentication import Authentication
+from server.middleware.require_json import RequireJSON
 
 from server.component.image_store import ImageStore
 from server.component.json_db import JsonDB
@@ -17,7 +18,12 @@ logger = logging.getLogger(__name__)
 def create_app(db, image_store, vision_api):
     setup_logger('output.log')
 
-    api = falcon.API()
+    api = falcon.API(
+        middleware=[
+            Authentication(),
+            RequireJSON()
+        ]
+    )
 
     database = Database(db)
     api.add_route(database.PATH, database)
