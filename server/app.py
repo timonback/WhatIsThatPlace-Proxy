@@ -1,12 +1,13 @@
-import falcon
 import logging
 import os
-from server.middleware.authentication import Authentication
-from server.middleware.require_json import RequireJSON
+
+import falcon
 
 from server.component.image_store import ImageStore
 from server.component.json_db import JsonDB
 from server.component.vision_api import VisionApi
+from server.middleware.authentication import AuthMiddleware
+from server.middleware.require_json import RequireJSON
 from server.resource.database import Database
 from server.resource.image import Collection, Item
 from server.resource.vision import Vision
@@ -20,7 +21,7 @@ def create_app(db, image_store, vision_api):
 
     api = falcon.API(
         middleware=[
-            Authentication(),
+            AuthMiddleware(),
             RequireJSON()
         ]
     )
