@@ -1,5 +1,6 @@
 import json
 import logging
+import threading
 
 from google.cloud.vision import ImageAnnotatorClient, types
 
@@ -10,6 +11,8 @@ class VisionApi:
     _DB_KEY = "VISION_API"
     _DB_QUOTA_KEY = "QUOTA"
     _DB_QUOTA_DEFAULT = 1000
+
+    quota_lock = threading.Lock()
 
     def __init__(self, db, image_store):
         self._db = db
@@ -83,11 +86,12 @@ class VisionApi:
         return response
 
     def _reduce_quota(self):
-        quota = self._load_from_db(self._DB_QUOTA_KEY)
-        if quota is None:
-            quota = self._DB_QUOTA_DEFAULT
-        quota = quota - 1
-        self._save_to_db(self._DB_QUOTA_KEY, quota)
+        with self.quota_lock:
+            quota = self._load_from_db(self._DB_QUOTA_KEY)
+            if quota is None:
+                quota = self._DB_QUOTA_DEFAULT
+            quota = quota - 1
+            self._save_to_db(self._DB_QUOTA_KEY, quota)
 
     def _load_from_db(self, identifier):
         if self._db:
