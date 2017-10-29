@@ -16,7 +16,7 @@ def setup_logger(filename):
     ch.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter(
-        f'%(asctime)s - %(levelname)7s - %(name)s: %(message)s')
+        '%(asctime)s - %(levelname)7s - %(name)s: %(message)s')
 
     fh.setFormatter(formatter)
     ch.setFormatter(formatter)
