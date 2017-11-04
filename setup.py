@@ -7,6 +7,7 @@ setup(
     version='0.0.1',
     install_requires=[
         'falcon>=1.1.0',
+        'falcon-multipart',
 
         'grpcio<1.6',
         'google-cloud-core==0.27.0',

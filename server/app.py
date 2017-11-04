@@ -1,6 +1,7 @@
 import falcon
 import logging
 import os
+from falcon_multipart.middleware import MultipartMiddleware
 from server.middleware.authentication import AuthMiddleware
 from server.middleware.require_json import RequireJSON
 
@@ -21,6 +22,7 @@ def create_app(db, image_store, vision_api):
     api = falcon.API(
         middleware=[
             AuthMiddleware(),
+            MultipartMiddleware(),
             RequireJSON()
         ]
     )

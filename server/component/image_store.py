@@ -1,7 +1,6 @@
 import hashlib
 import io
 import logging
-import mimetypes
 import os
 import re
 import uuid
@@ -44,10 +43,10 @@ class ImageStore(object):
 
         return stream, stream_len
 
-    def save(self, image_stream, image_content_type):
+    def save(self, file):
         logger.info('Storing incoming image')
 
-        ext = mimetypes.guess_extension(image_content_type)
+        ext = ".jpg"
         name = '{uuid}{ext}'.format(uuid=self._uuidgen(), ext=ext)
         image_path = os.path.join(self._storage_path, name)
 
@@ -55,7 +54,7 @@ class ImageStore(object):
 
         with self._fopen(image_path, 'wb') as image_file:
             while True:
-                chunk = image_stream.read(self._CHUNK_SIZE_BYTES)
+                chunk = file.read(self._CHUNK_SIZE_BYTES)
                 if not chunk:
                     break
 

@@ -4,6 +4,7 @@ import mimetypes
 
 class Collection(object):
     PATH = '/image'
+    PARAM_IMAGE = 'image'
 
     def __init__(self, image_store):
         self._image_store = image_store
@@ -18,7 +19,9 @@ class Collection(object):
         resp.status = falcon.HTTP_200
 
     def on_post(self, req, resp):
-        name = self._image_store.save(req.stream, req.content_type)
+        image = req.get_param(self.PARAM_IMAGE)
+
+        name = self._image_store.save(image.image.file)
         resp.status = falcon.HTTP_201
         resp.location = self.PATH + name
 

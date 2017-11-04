@@ -12,6 +12,7 @@ source env/bin/activate
 python3 setup.py install
 
 export GOOGLE_APPLICATION_CREDENTIALS=gkey.json
+export STORAGE_PATH=./image_store
 
 function server_unix() {
     # On Unix
