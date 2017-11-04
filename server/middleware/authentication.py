@@ -12,7 +12,7 @@ class AuthMiddleware(object):
             description = ('Please provide an auth token '
                            'as part of the request.')
 
-            raise falcon.HTTPUnauthorized('Auth token required',
+            raise falcon.HTTPUnauthorized('Authentication required',
                                           description,
                                           challenges,
                                           href='http://docs.example.com/auth')
