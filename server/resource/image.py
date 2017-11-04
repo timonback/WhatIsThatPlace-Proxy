@@ -2,23 +2,6 @@ import falcon
 import json
 import mimetypes
 
-
-class ImageTypeValidator:
-    ALLOWED_IMAGE_TYPES = (
-        'image/gif',
-        'image/jpeg',
-        'image/jpg',
-        'image/png',
-    )
-
-    @classmethod
-    def validate_image_type(cls, req, resp, resource, params):
-        if req.content_type not in cls.ALLOWED_IMAGE_TYPES:
-            msg = 'Image type not allowed. Must be PNG, JPEG, or GIF. Got ' + \
-                  str(req.content_type)
-            raise falcon.HTTPBadRequest('Bad request', msg)
-
-
 class Collection(object):
     PATH = '/image'
 
@@ -34,7 +17,6 @@ class Collection(object):
         resp.content_type = falcon.MEDIA_JSON
         resp.status = falcon.HTTP_200
 
-    @falcon.before(ImageTypeValidator.validate_image_type)
     def on_post(self, req, resp):
         name = self._image_store.save(req.stream, req.content_type)
         resp.status = falcon.HTTP_201
