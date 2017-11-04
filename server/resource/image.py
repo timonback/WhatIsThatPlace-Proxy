@@ -14,7 +14,8 @@ class ImageTypeValidator:
     @classmethod
     def validate_image_type(cls, req, resp, resource, params):
         if req.content_type not in cls.ALLOWED_IMAGE_TYPES:
-            msg = 'Image type not allowed. Must be PNG, JPEG, or GIF'
+            msg = 'Image type not allowed. Must be PNG, JPEG, or GIF. Got ' + \
+                  str(req.content_type)
             raise falcon.HTTPBadRequest('Bad request', msg)
 
 
