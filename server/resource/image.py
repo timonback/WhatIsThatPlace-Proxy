@@ -1,7 +1,6 @@
+import falcon
 import json
 import mimetypes
-
-import falcon
 
 
 class ImageTypeValidator:
@@ -20,7 +19,7 @@ class ImageTypeValidator:
 
 
 class Collection(object):
-    PATH = '/image/'
+    PATH = '/image'
 
     def __init__(self, image_store):
         self._image_store = image_store
@@ -41,7 +40,9 @@ class Collection(object):
         resp.location = self.PATH + name
 
 
-class Item(object):
+class CollectionItem(object):
+    PATH = Collection.PATH + '/{name}'
+
     def __init__(self, image_store):
         self._image_store = image_store
 
