@@ -14,7 +14,7 @@ class ImageStore(object):
     _IMAGE_NAME_PATTERN = re.compile(
         '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.[a-z]{2,4}$'
     )
-    _DB_KEY = "IMAGE_STORE"
+    _DB_KEY = 'IMAGE_STORE'
 
     def __init__(self, storage_path, db=None, uuidgen=uuid.uuid4, fopen=io.open):
         self._storage_path = storage_path
@@ -32,7 +32,7 @@ class ImageStore(object):
         return items
 
     def open(self, name):
-        logger.info("Returning file {name}")
+        logger.info('Returning file {name}'.format(name=name))
 
         # Always validate untrusted input!
         if not self._IMAGE_NAME_PATTERN.match(name):
@@ -45,7 +45,7 @@ class ImageStore(object):
         return stream, stream_len
 
     def save(self, image_stream, image_content_type):
-        logger.info("Storing incoming image")
+        logger.info('Storing incoming image')
 
         ext = mimetypes.guess_extension(image_content_type)
         name = '{uuid}{ext}'.format(uuid=self._uuidgen(), ext=ext)
@@ -65,15 +65,15 @@ class ImageStore(object):
         if self._db:
             key = file_hash.hexdigest()
             db_obj = self._db.get(self._DB_KEY)
-            logger.debug("{}".format(db_obj))
+            logger.debug('{}'.format(db_obj))
 
             if key in db_obj:
-                logger.info("This file was already uploaded before")
+                logger.info('This file was already uploaded before')
                 os.remove(image_path)
                 name = db_obj[key]
             else:
                 db_obj[key] = name
                 self._db.set(self._DB_KEY, db_obj)
 
-        logger.info("Image uses as identifier: {name}")
+        logger.info('Image uses as identifier: {name}'.format(name=name))
         return name

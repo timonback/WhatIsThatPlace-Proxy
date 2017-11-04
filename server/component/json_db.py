@@ -17,10 +17,10 @@ class JsonDB:
                 try:
                     self.db = json.load(json_data)
                 except ValueError:
-                    logger.warning("Could not parse the data in {}".format(self.filename))
+                    logger.warning('Could not parse the data in {}'.format(self.filename))
                     self.db = {}
         except FileNotFoundError:
-            logger.warning("Could not open database file {}".format(self.filename))
+            logger.warning('Could not open database file {}'.format(self.filename))
 
     def get(self, key):
         if key in self.db.keys():
@@ -37,10 +37,10 @@ class JsonDB:
 
     def set(self, key, value, overwrite=True):
         if not self._is_jsonable(key):
-            logger.error("The key is not saveable {}".format(key))
+            logger.error('The key is not saveable {}'.format(key))
             return
         if not self._is_jsonable(value):
-            logger.error("The value is not saveable {}".format(value))
+            logger.error('The value is not saveable {}'.format(value))
             return
 
         if key in self.db.keys() and overwrite is False:

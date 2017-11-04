@@ -6,9 +6,9 @@ logger = logging.getLogger(__name__)
 
 class RequireJSON(object):
     def process_request(self, req, resp):
-        logger.info("Incoming request " + req.path)
+        logger.info('Incoming request ' + req.path)
 
-        if req.path == "/image":
+        if req.path == '/image':
             return
 
         if not req.client_accepts_json:

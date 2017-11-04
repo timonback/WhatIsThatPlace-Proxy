@@ -27,4 +27,4 @@ class AuthMiddleware(object):
                                           href='http://docs.example.com/auth')
 
     def _token_is_valid(self, token, account_id):
-        return "988c4dcf-d7d2-45f1-b4ec-9123a0ab61d1" == token
+        return '988c4dcf-d7d2-45f1-b4ec-9123a0ab61d1' == token

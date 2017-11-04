@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 
 
 class VisionApi:
-    _DB_KEY = "VISION_API"
-    _DB_QUOTA_KEY = "QUOTA"
+    _DB_KEY = 'VISION_API'
+    _DB_QUOTA_KEY = 'QUOTA'
     _DB_QUOTA_DEFAULT = 1000
 
     quota_lock = threading.Lock()
@@ -25,8 +25,8 @@ class VisionApi:
         if db_response is None:
             quota = self._load_from_db(self._DB_QUOTA_KEY)
             if quota == 0:
-                logger.warning("Quota is exceeded!")
-                return {"error": "Quota is exceeded"}
+                logger.warning('Quota is exceeded!')
+                return {'error': 'Quota is exceeded'}
 
             image_file, length = self._image_store.open(identifier)
             content = image_file.read()
@@ -51,12 +51,12 @@ class VisionApi:
             res_vertices = []
             for vortex in landmark.bounding_poly.vertices:
                 res_vortex = {
-                    "x": vortex.x,
-                    "y": vortex.y,
+                    'x': vortex.x,
+                    'y': vortex.y,
                 }
                 res_vertices.append(res_vortex)
             res_bounding_poly = {
-                "vertices": res_vertices
+                'vertices': res_vertices
             }
 
             res_locations = []
@@ -66,20 +66,20 @@ class VisionApi:
                 print('Longitude'.format(lat_lng.longitude))
 
                 res_location = {
-                    "latitude": lat_lng.latitude,
-                    "longitude": lat_lng.longitude,
+                    'latitude': lat_lng.latitude,
+                    'longitude': lat_lng.longitude,
                 }
                 res_locations.append(res_location)
             res_landmark = {
-                "mid": landmark.mid,
-                "description": landmark.description,
-                "score": landmark.score,
-                "locations": res_locations,
-                "bounding_poly": res_bounding_poly,
+                'mid': landmark.mid,
+                'description': landmark.description,
+                'score': landmark.score,
+                'locations': res_locations,
+                'bounding_poly': res_bounding_poly,
             }
             res_landmarks.append(res_landmark)
 
-        response["landmarks"] = res_landmarks
+        response['landmarks'] = res_landmarks
 
         self._save_to_db(identifier, response)
 
