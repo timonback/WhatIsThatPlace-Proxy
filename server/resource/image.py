@@ -21,7 +21,7 @@ class Collection(object):
     def on_post(self, req, resp):
         image = req.get_param(self.PARAM_IMAGE)
 
-        name = self._image_store.save(image.image.file)
+        name = self._image_store.save(image.file)
         resp.status = falcon.HTTP_201
         resp.location = self.PATH + name
 

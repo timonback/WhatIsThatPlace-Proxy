@@ -46,7 +46,7 @@ class ImageStore(object):
     def save(self, file):
         logger.info('Storing incoming image')
 
-        ext = ".jpg"
+        ext = os.path.splitext(file.filename)[1]
         name = '{uuid}{ext}'.format(uuid=self._uuidgen(), ext=ext)
         image_path = os.path.join(self._storage_path, name)
 
