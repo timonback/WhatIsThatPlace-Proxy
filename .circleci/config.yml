@@ -1,0 +1,26 @@
+version: 2
+
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/python:3.6.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "setup.py" }}
+      - run:
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            python3 setup.py install
+      - save_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "setup.py" }}
+          paths:
+            - "venv"
+      - run:
+          command: |
+            . venv/bin/activate
+            pytest
+      - store_artifacts:
+          path: test-reports/
