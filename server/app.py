@@ -37,14 +37,11 @@ def create_app(db, image_store, vision_api):
     return api
 
 
-def create_app_db():
-    db_path = os.environ.get('DB_PATH', 'data.json')
-    db = JsonDB(db_path)
-    return db
+def create_app_db(path):
+    return JsonDB(path)
 
 
-def create_app_image_storage(db):
-    storage_path = os.environ.get('STORAGE_PATH', '.')
+def create_app_image_storage(storage_path, db):
     image_store = ImageStore(storage_path, db)
     return image_store
 
@@ -53,7 +50,9 @@ def get_app():
     # hack to allow tests without google vision api
     from server.component.vision_api import VisionApi
 
-    db = create_app_db()
-    image_store = create_app_image_storage(db)
+    db_path = os.environ.get('DB_PATH', 'data.json')
+    db = create_app_db(db_path)
+    storage_path = os.environ.get('STORAGE_PATH', '.')
+    image_store = create_app_image_storage(storage_path, db)
     vision_api = VisionApi(db, image_store)
     return create_app(db, image_store, vision_api)

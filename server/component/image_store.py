@@ -43,10 +43,12 @@ class ImageStore(object):
 
         return stream, stream_len
 
-    def save(self, file):
+    def save(self, file, filename):
         logger.info('Storing incoming image')
 
-        ext = os.path.splitext(file.filename)[1]
+        ext = None
+        if filename is not None and len(filename) > 1:
+            ext = os.path.splitext(filename)[1]
         name = '{uuid}{ext}'.format(uuid=self._uuidgen(), ext=ext)
         image_path = os.path.join(self._storage_path, name)
 

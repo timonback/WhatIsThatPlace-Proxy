@@ -20,10 +20,14 @@ class Collection(object):
 
     def on_post(self, req, resp):
         image = req.get_param(self.PARAM_IMAGE)
+        if image is None:
+            raise falcon.HTTPBadRequest('No file passed to the {} parameter'.format(
+                self.PARAM_IMAGE))
 
-        name = self._image_store.save(image.file)
+        file_id = self._image_store.save(image.file, image.filename)
         resp.status = falcon.HTTP_201
-        resp.location = self.PATH + name
+        resp.media = {'id': file_id}
+        resp.location = self.PATH + file_id
 
 
 class CollectionItem(object):
