@@ -16,6 +16,8 @@ setup(
         'gunicorn', #Linux
         # 'waitress', #Windows
         'httpie', #Nice http client
+
+        'pytest',
     ],
     url='https://github.com/timonback/whatisthatplace-proxy',
     license='MIT',
