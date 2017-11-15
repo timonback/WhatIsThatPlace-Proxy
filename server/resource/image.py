@@ -27,7 +27,7 @@ class Collection(object):
         file_id = self._image_store.save(image.file, image.filename)
         resp.status = falcon.HTTP_201
         resp.media = {'id': file_id}
-        resp.location = self.PATH + file_id
+        resp.location = self.PATH + '/' + file_id
 
 
 class CollectionItem(object):
