@@ -2,10 +2,14 @@ import falcon
 
 
 class AuthMiddleware(object):
+    TOKEN = '988c4dcf-d7d2-45f1-b4ec-9123a0ab61d1'
+
     def process_request(self, req, resp):
         token = req.get_header('Authorization')
-        account_id = req.get_header('Account-ID')
+        if token is None:
+            token = req.get_param('Authorization')
 
+        account_id = req.get_header('Account-ID')
         challenges = ['Token type="Fernet"']
 
         if token is None:
@@ -27,4 +31,4 @@ class AuthMiddleware(object):
                                           href='http://docs.example.com/auth')
 
     def _token_is_valid(self, token, account_id):
-        return '988c4dcf-d7d2-45f1-b4ec-9123a0ab61d1' == token
+        return self.TOKEN == token

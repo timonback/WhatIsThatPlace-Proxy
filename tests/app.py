@@ -5,6 +5,7 @@ import string
 from falcon import testing
 
 from server.app import *
+from server.middleware.authentication import AuthMiddleware
 from tests.mock.vision_api import VisionApiMock
 
 
@@ -26,7 +27,7 @@ def client():
 
 def client_headers():
     return {
-        'Authorization': '988c4dcf-d7d2-45f1-b4ec-9123a0ab61d1'
+        'Authorization': AuthMiddleware.TOKEN
     }
 
 
