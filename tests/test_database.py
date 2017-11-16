@@ -1,7 +1,7 @@
 from tests.app import *
 
 
-def test_empty_database(client):
+def test_database_empty(client):
     doc = {}
 
     response = client.simulate_get('/database', headers=client_headers())
