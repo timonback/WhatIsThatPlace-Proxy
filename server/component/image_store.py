@@ -40,8 +40,9 @@ class ImageStore(object):
         if self._db:
             db_obj = self._db.get(self._DB_KEY)
             if name in db_obj:
+                image_file = db_obj[name]
                 logger.debug('Requested image {name} - found'.format(name=name))
-                return self._get_stream(db_obj[name])
+                return self._get_stream(image_file)
         logger.debug('Requested image {name} - fallback'.format(name=name))
         return self._get_stream(name)
 
@@ -50,7 +51,7 @@ class ImageStore(object):
         stream = self._fopen(image_path, 'rb')
         stream_len = os.path.getsize(image_path)
 
-        return stream, stream_len
+        return stream, stream_len, image_name
 
     def save(self, file, filename):
         logger.info('Storing incoming image')

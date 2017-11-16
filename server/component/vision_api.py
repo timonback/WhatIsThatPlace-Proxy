@@ -28,7 +28,7 @@ class VisionApi:
                 logger.warning('Quota is exceeded!')
                 return {'error': 'Quota is exceeded'}
 
-            image_file, length = self._image_store.open(identifier)
+            image_file, length, filename = self._image_store.open(identifier)
             content = image_file.read()
             db_response = self._execute(identifier, content)
         return db_response

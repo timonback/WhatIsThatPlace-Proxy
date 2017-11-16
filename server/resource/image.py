@@ -39,7 +39,9 @@ class CollectionItem(object):
     def on_get(self, req, resp, name):
         resp.content_type = 'image/*'
         try:
-            resp.stream, resp.stream_len = self._image_store.open(name)
+            resp.stream, resp.stream_len, filename = self._image_store.open(name)
+            resp.append_header('Content-Disposition',
+                               'inline; filename="' + filename + '"')
             resp.status = falcon.HTTP_OK
         except IOError:
             # Normally you would also log the error.
