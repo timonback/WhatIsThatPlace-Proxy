@@ -47,9 +47,6 @@ def create_multipart(data, fieldname, filename, content_type):
     buff.write(b'\r\n')
     buff.write(b'\r\n')
     buff.write(data)
-    buff.write(b'\r\n')
-    buff.write(boundry.encode())
-    buff.write(b'--\r\n')
     headers = {'Content-Type': 'multipart/form-data; boundary=%s' % boundry}
     headers['Content-Length'] = str(buff.tell())
     return buff.getvalue(), headers

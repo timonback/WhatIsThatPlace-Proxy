@@ -1,6 +1,6 @@
 import falcon
 import json
-import mimetypes
+
 
 class Collection(object):
     PATH = '/image'
@@ -25,7 +25,7 @@ class Collection(object):
                 self.PARAM_IMAGE))
 
         file_id = self._image_store.save(image.file, image.filename)
-        resp.status = falcon.HTTP_201
+        resp.status = falcon.HTTP_CREATED
         resp.media = {'id': file_id}
         resp.location = self.PATH + '/' + file_id
 
@@ -37,9 +37,10 @@ class CollectionItem(object):
         self._image_store = image_store
 
     def on_get(self, req, resp, name):
-        resp.content_type = mimetypes.guess_type(name)[0]
+        resp.content_type = 'image/*'
         try:
             resp.stream, resp.stream_len = self._image_store.open(name)
+            resp.status = falcon.HTTP_OK
         except IOError:
             # Normally you would also log the error.
             raise falcon.HTTPNotFound()
