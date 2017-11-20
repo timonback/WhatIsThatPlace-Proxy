@@ -30,6 +30,13 @@ class ImageStore(object):
 
         return items
 
+    def contains(self, name):
+        if self._db:
+            db_obj = self._db.get(self._DB_KEY)
+            if name in db_obj.keys():
+                return True
+        return False
+
     def open(self, name):
         logger.info('Requested image {name}'.format(name=name))
 

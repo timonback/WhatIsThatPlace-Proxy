@@ -2,6 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class GVisionClient:
     """
     Adapter that can be mocked for testing
@@ -20,7 +21,6 @@ class GVisionClient:
 
         res_landmarks = []
         for landmark in gresponse.landmark_annotations:
-            print(landmark.description)
 
             res_vertices = []
             for vortex in landmark.bounding_poly.vertices:

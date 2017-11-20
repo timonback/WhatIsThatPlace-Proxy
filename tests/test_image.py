@@ -36,3 +36,18 @@ def test_image_get(client):
 
     assert response.status == falcon.HTTP_OK
     assert response.content == b'abcdef'
+
+
+def test_image_head(client):
+    upload_response = helper_image_upload(client)
+    image_id = upload_response.json['id']
+
+    response = client.simulate_head('/image/' + image_id, headers=client_headers())
+
+    assert response.status == falcon.HTTP_OK
+
+
+def test_image_head_404(client):
+    response = client.simulate_head('/image/nonExisting', headers=client_headers())
+
+    assert response.status == falcon.HTTP_NOT_FOUND

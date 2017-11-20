@@ -46,3 +46,9 @@ class CollectionItem(object):
         except IOError:
             # Normally you would also log the error.
             raise falcon.HTTPNotFound()
+
+    def on_head(self, req, resp, name):
+        if self._image_store.contains(name):
+            resp.status = falcon.HTTP_200
+        else:
+            resp.status = falcon.HTTP_NOT_FOUND
