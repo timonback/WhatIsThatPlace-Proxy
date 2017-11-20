@@ -2,7 +2,6 @@ import pytest
 from falcon import testing
 
 from server.app import *
-from server.middleware.authentication import AuthMiddleware
 from tests.mock.vision_api import VisionApiMock
 
 
@@ -20,9 +19,3 @@ def client():
     api = create_app(db, image_store, vision_api)
 
     return testing.TestClient(api)
-
-
-def client_headers():
-    return {
-        'Authorization': AuthMiddleware.TOKEN
-    }

@@ -1,4 +1,4 @@
-from tests.app import *
+from tests.helper.headers import *
 from tests.helper.multipart import *
 
 

@@ -1,4 +1,6 @@
+from tests.helper.client import *
 from tests.helper.image_upload import *
+
 
 def test_image_upload(client):
     response = helper_image_upload(client)
@@ -16,11 +18,12 @@ def test_image_list_empty(client):
 
 def test_image_list(client):
     upload_response = helper_image_upload(client)
+    image_id = upload_response.json['id']
 
     response = client.simulate_get('/image', headers=client_headers())
 
     assert response.json == {
-        'images': [upload_response.json['id']]
+        'images': [image_id]
     }
     assert response.status == falcon.HTTP_OK
 
