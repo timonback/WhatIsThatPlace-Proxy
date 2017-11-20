@@ -1,4 +1,5 @@
 from tests.app import *
+from tests.helper.multipart import *
 
 def test_image_upload(client):
     data, headers = create_multipart(b'abcdef', fieldname='image',

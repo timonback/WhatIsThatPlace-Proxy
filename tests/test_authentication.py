@@ -1,6 +1,4 @@
-from server.middleware.authentication import AuthMiddleware
 from tests.app import *
-
 
 def test_auth_database(client):
     response = client.simulate_get('/database')
