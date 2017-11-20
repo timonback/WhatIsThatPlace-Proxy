@@ -1,9 +1,11 @@
 import falcon
 import json
 
+from server.resource.image import CollectionItem
+
 
 class Vision:
-    PATH = '/vision/{name}'
+    PATH = CollectionItem.PATH + '/landmark'
 
     def __init__(self, vision_api):
         self._vision_api = vision_api
