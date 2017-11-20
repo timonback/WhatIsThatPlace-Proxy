@@ -5,6 +5,7 @@ from falcon_multipart.middleware import MultipartMiddleware
 
 from server.component.image_store import ImageStore
 from server.component.json_db import JsonDB
+from server.component.vision_api import VisionApi
 from server.middleware.authentication import AuthMiddleware
 from server.middleware.require_json import RequireJSON
 from server.resource.database import Database
@@ -47,12 +48,12 @@ def create_app_image_storage(storage_path, db):
 
 
 def get_app():
-    # hack to allow tests without google vision api
-    from server.component.vision_api import VisionApi
+    # hack
+    from server.component.gvision_adapter import GVisionClient
 
     db_path = os.environ.get('DB_PATH', 'data.json')
     db = create_app_db(db_path)
     storage_path = os.environ.get('STORAGE_PATH', '.')
     image_store = create_app_image_storage(storage_path, db)
-    vision_api = VisionApi(db, image_store)
+    vision_api = VisionApi(db, image_store, GVisionClient())
     return create_app(db, image_store, vision_api)

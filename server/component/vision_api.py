@@ -2,7 +2,7 @@ import json
 import logging
 import threading
 
-from google.cloud.vision import ImageAnnotatorClient, types
+from google.cloud.vision import types
 
 logger = logging.getLogger(__name__)
 
@@ -14,11 +14,10 @@ class VisionApi:
 
     quota_lock = threading.Lock()
 
-    def __init__(self, db, image_store):
+    def __init__(self, db, image_store, client):
         self._db = db
         self._image_store = image_store
-
-        self._client = ImageAnnotatorClient()
+        self._client = client
 
     def analyse(self, identifier):
         db_response = self._load_from_db(identifier)
@@ -39,47 +38,8 @@ class VisionApi:
         self._reduce_quota()
 
         # Performs label detection on the image file
-        gresponse = self._client.landmark_detection(image=image)
-
-        response = {}
-
-        print('Landmarks:')
-        res_landmarks = []
-        for landmark in gresponse.landmark_annotations:
-            print(landmark.description)
-
-            res_vertices = []
-            for vortex in landmark.bounding_poly.vertices:
-                res_vortex = {
-                    'x': vortex.x,
-                    'y': vortex.y,
-                }
-                res_vertices.append(res_vortex)
-            res_bounding_poly = {
-                'vertices': res_vertices
-            }
-
-            res_locations = []
-            for location in landmark.locations:
-                lat_lng = location.lat_lng
-                print('Latitude'.format(lat_lng.latitude))
-                print('Longitude'.format(lat_lng.longitude))
-
-                res_location = {
-                    'latitude': lat_lng.latitude,
-                    'longitude': lat_lng.longitude,
-                }
-                res_locations.append(res_location)
-            res_landmark = {
-                'mid': landmark.mid,
-                'description': landmark.description,
-                'score': landmark.score,
-                'locations': res_locations,
-                'bounding_poly': res_bounding_poly,
-            }
-            res_landmarks.append(res_landmark)
-
-        response['landmarks'] = res_landmarks
+        response = self._client.landmark_detection(image=image)
+        logger.debug('Response {}'.format(response))
 
         self._save_to_db(identifier, response)
 
@@ -103,5 +63,5 @@ class VisionApi:
     def _save_to_db(self, identifier, response):
         if self._db:
             db_obj = self._db.get(self._DB_KEY)
-            db_obj[identifier] = json.dump(response)
+            db_obj[identifier] = json.dumps(response, default=lambda o: o.__dict__)
             self._db.set(self._DB_KEY, db_obj)
