@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 class GVisionClient:
     """
     Adapter that can be mocked for testing
@@ -12,8 +16,8 @@ class GVisionClient:
     def landmark_detection(self, image):
         response = {}
         gresponse = self._client.landmark_detection(image=image)
+        logger.debug('Raw Response {}'.format(gresponse))
 
-        print('Landmarks:')
         res_landmarks = []
         for landmark in gresponse.landmark_annotations:
             print(landmark.description)
