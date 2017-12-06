@@ -15,7 +15,6 @@ class GVisionClient:
         self._client = client
 
     def landmark_detection(self, image):
-        response = {}
         gresponse = self._client.landmark_detection(image=image)
         logger.debug('Raw Response {}'.format(gresponse))
 
@@ -53,5 +52,6 @@ class GVisionClient:
             }
             res_landmarks.append(res_landmark)
 
+        response = {}
         response['landmarks'] = res_landmarks
         return response
