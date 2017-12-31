@@ -46,12 +46,25 @@ def test_image_get_if_modified_since(client):
     image_id = upload_response.json['id']
 
     headers = client_headers()
-    last_modified = datetime.datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT')
+    last_modified = datetime.datetime(year=2030, month=1, day=1).strftime('%a, %d %b %Y %H:%M:%S GMT')
     headers['If-Modified-Since'] = last_modified
 
     response = client.simulate_get('/image/' + image_id, headers=headers)
 
     assert response.status == falcon.HTTP_NOT_MODIFIED
+
+
+def test_image_get_if_modified_since_not(client):
+    upload_response = helper_image_upload(client)
+    image_id = upload_response.json['id']
+
+    headers = client_headers()
+    last_modified = datetime.datetime(year=2000, month=1, day=1).strftime('%a, %d %b %Y %H:%M:%S GMT')
+    headers['If-Modified-Since'] = last_modified
+
+    response = client.simulate_get('/image/' + image_id, headers=headers)
+
+    assert response.status != falcon.HTTP_NOT_MODIFIED
 
 
 def test_image_head(client):
