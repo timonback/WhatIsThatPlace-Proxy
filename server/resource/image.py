@@ -1,5 +1,7 @@
+import datetime
 import falcon
 import json
+import os
 
 
 class Collection(object):
@@ -37,12 +39,23 @@ class CollectionItem(object):
         self._image_store = image_store
 
     def on_get(self, req, resp, name):
-        resp.content_type = 'image/*'
         try:
-            resp.stream, resp.stream_len, filename = self._image_store.open(name)
-            resp.append_header('Content-Disposition',
-                               'inline; filename="' + filename + '"')
-            resp.status = falcon.HTTP_OK
+            stream, stream_len, filename = self._image_store.open(name)
+            mtime = datetime.datetime.fromtimestamp(
+                os.path.getmtime(stream.name))
+
+            if req.if_modified_since is not None and mtime <= req.if_modified_since:
+                resp.status = falcon.HTTP_NOT_MODIFIED
+                resp.body = None
+            else:
+                resp.stream = stream
+                resp.stream_len = stream_len
+                resp.append_header('Content-Disposition',
+                                   'inline; filename="' + filename + '"')
+
+                resp.last_modified = mtime
+                resp.content_type = 'image/*'
+                resp.status = falcon.HTTP_OK
         except IOError:
             # Normally you would also log the error.
             raise falcon.HTTPNotFound()

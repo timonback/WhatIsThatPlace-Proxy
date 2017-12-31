@@ -1,3 +1,5 @@
+import datetime
+
 from tests.helper.client import *
 from tests.helper.image_upload import *
 
@@ -35,7 +37,21 @@ def test_image_get(client):
     response = client.simulate_get('/image/' + image_id, headers=client_headers())
 
     assert response.status == falcon.HTTP_OK
+    assert 'Last-Modified' in response.headers
     assert response.content == b'abcdef'
+
+
+def test_image_get_if_modified_since(client):
+    upload_response = helper_image_upload(client)
+    image_id = upload_response.json['id']
+
+    headers = client_headers()
+    last_modified = datetime.datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT')
+    headers['If-Modified-Since'] = last_modified
+
+    response = client.simulate_get('/image/' + image_id, headers=headers)
+
+    assert response.status == falcon.HTTP_NOT_MODIFIED
 
 
 def test_image_head(client):
