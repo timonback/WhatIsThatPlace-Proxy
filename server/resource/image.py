@@ -46,7 +46,6 @@ class CollectionItem(object):
 
             if req.if_modified_since is not None and mtime <= req.if_modified_since:
                 resp.status = falcon.HTTP_NOT_MODIFIED
-                resp.body = None
             else:
                 resp.stream = stream
                 resp.stream_len = stream_len

@@ -1,7 +1,7 @@
 import json
 import logging
 import threading
-
+import time
 from google.cloud.vision import types
 
 logger = logging.getLogger(__name__)
@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 class VisionApi:
     _DB_KEY = 'VISION_API'
+    _DB_TIMING_KEY = 'VISION_API_TIMING'
     _DB_QUOTA_KEY = 'QUOTA'
     _DB_QUOTA_DEFAULT = 1000
 
@@ -37,11 +38,15 @@ class VisionApi:
 
         self._reduce_quota()
 
+        timing_start = time.perf_counter()
         # Performs label detection on the image file
         response = self._client.landmark_detection(image=image)
+        timing_end = time.perf_counter()
+
         logger.debug('Response {}'.format(response))
 
         self._save_to_db(identifier, response)
+        self._save_timing(identifier, timing_end - timing_start)
 
         return response
 
@@ -65,3 +70,9 @@ class VisionApi:
             db_obj = self._db.get(self._DB_KEY)
             db_obj[identifier] = json.dumps(response, default=lambda o: o.__dict__)
             self._db.set(self._DB_KEY, db_obj)
+
+    def _save_timing(self, identifier, timing):
+        if self._db:
+            db_obj = self._db.get(self._DB_TIMING_KEY)
+            db_obj[identifier] = timing
+            self._db.set(self._DB_TIMING_KEY, db_obj)

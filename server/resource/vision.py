@@ -6,6 +6,7 @@ from server.resource.image import CollectionItem
 
 logger = logging.getLogger(__name__)
 
+
 class Vision:
     PATH = CollectionItem.PATH + '/landmark'
 
