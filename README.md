@@ -17,3 +17,6 @@ source envlinux/bin/activate
 Just run ```run.sh```
 
 The python dependencies will be installed automatically.
+
+## Security
+Make sure to protect your server. This proxy server requires an authentication token, when you move out of the testing phase, change it!
