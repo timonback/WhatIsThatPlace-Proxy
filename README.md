@@ -1,5 +1,7 @@
 # WhatisthatPlace-Proxy
 
+[![CircleCI](https://circleci.com/gh/timonback/WhatisthatPlace-Proxy.svg?style=svg)](https://circleci.com/gh/timonback/WhatisthatPlace-Proxy)
+
 This is a small proxy/caching application to stand between an application and the Google Vision API. This shall ensure that the same image is only analyzed once (save money) and to allow an easy exchange of the associated google project instead of having to redeploy another application (mobile application) that might take some days.
 
 ## Prerequisite
@@ -19,4 +21,4 @@ Just run ```run.sh```
 The python dependencies will be installed automatically.
 
 ## Security
-Make sure to protect your server. This proxy server requires an authentication token, when you move out of the testing phase, change it! [https://github.com/timonback/WhatisthatPlace-Proxy/blob/master/server/middleware/authentication.py](https://github.com/timonback/WhatisthatPlace-Proxy/blob/master/server/middleware/authentication.py)
+Make sure to protect your server! This proxy server requires an authentication token, when you move out of the testing phase, change it! [https://github.com/timonback/WhatisthatPlace-Proxy/blob/master/server/middleware/authentication.py](https://github.com/timonback/WhatisthatPlace-Proxy/blob/master/server/middleware/authentication.py)
